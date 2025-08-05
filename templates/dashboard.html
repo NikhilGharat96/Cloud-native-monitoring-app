@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>System Monitoring Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto Mono', monospace;
+            background-color: #1f1f2e;
+            color: white;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #00c9ff, #92fe9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dashboard {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            flex-wrap: wrap;
+            padding: 30px;
+        }
+
+        .card {
+            background-color: #2b2b3c;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            width: 350px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .plot {
+            width: 100%;
+            height: 100%;
+        }
+
+        .alert {
+            text-align: center;
+            background-color: #ff4c4c;
+            padding: 10px;
+            margin: 10px auto;
+            border-radius: 8px;
+            width: 80%;
+            font-weight: bold;
+        }
+
+        .refresh-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .refresh-button {
+            background-color: #00c9ff;
+            color: #1f1f2e;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .refresh-button:hover {
+            background-color: #00aacc;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">🖥️ System Monitoring Dashboard</div>
+
+    {% if message %}
+    <div class="alert">{{ message }}</div>
+    {% endif %}
+
+    <div class="dashboard">
+        <div class="card">
+            <div id="cpu-gauge" class="plot"></div>
+        </div>
+        <div class="card">
+            <div id="mem-gauge" class="plot"></div>
+        </div>
+    </div>
+
+    <div class="refresh-container">
+        <button class="refresh-button" onclick="location.reload();">🔄 Refresh Dashboard</button>
+    </div>
+
+    <script>
+        var cpuGauge = {
+            type: "indicator",
+            mode: "gauge+number",
+            value: {{ cpu_metric }},
+            title: { text: "CPU Usage (%)", font: { size: 24, color: "white" } },
+            gauge: {
+                axis: { range: [null, 100], tickcolor: "white" },
+                bar: { color: "#00cc96" },
+                bgcolor: "#2b2b3c",
+                borderwidth: 2,
+                bordercolor: "#444",
+                steps: [
+                    { range: [0, 50], color: "#2ecc71" },
+                    { range: [50, 85], color: "#f1c40f" },
+                    { range: [85, 100], color: "#e74c3c" }
+                ],
+                threshold: {
+                    line: { color: "red", width: 4 },
+                    thickness: 0.75,
+                    value: {{ cpu_metric }}
+                }
+            }
+        };
+
+        var memGauge = {
+            type: "indicator",
+            mode: "gauge+number",
+            value: {{ mem_metric }},
+            title: { text: "Memory Usage (%)", font: { size: 24, color: "white" } },
+            gauge: {
+                axis: { range: [null, 100], tickcolor: "white" },
+                bar: { color: "#636efa" },
+                bgcolor: "#2b2b3c",
+                borderwidth: 2,
+                bordercolor: "#444",
+                steps: [
+                    { range: [0, 50], color: "#2ecc71" },
+                    { range: [50, 85], color: "#f1c40f" },
+                    { range: [85, 100], color: "#e74c3c" }
+                ],
+                threshold: {
+                    line: { color: "red", width: 4 },
+                    thickness: 0.75,
+                    value: {{ mem_metric }}
+                }
+            }
+        };
+
+        Plotly.newPlot('cpu-gauge', [cpuGauge], { paper_bgcolor: "#2b2b3c", font: { color: "white" } });
+        Plotly.newPlot('mem-gauge', [memGauge], { paper_bgcolor: "#2b2b3c", font: { color: "white" } });
+    </script>
+</body>
+</html>
