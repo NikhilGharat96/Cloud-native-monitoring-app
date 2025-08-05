@@ -1,6 +1,7 @@
-# **Cloud Native Resource Monitoring Python App on K8s!**
+# **Cloud Native 🖥️Resource Monitoring Python App on K8s☸️! 👇**
+<img src="sys-monitoring.png" alt="Project Screenshot" width="1000"/>
 
-## Things you will Learn 🤯
+## 🚀Things you will Learn 🥳
 
 1. Python and How to create Monitoring Application in Python using Flask and psutil
 2. How to run a Python App locally.
@@ -93,7 +94,7 @@ To build the Docker image, execute the following command:
 docker build -t <image_name> .
 ```
 
-### **Step 3: Run the Docker container**
+### **Step 3: Run the Docker🐳 container**
 
 To run the Docker container, execute the following command:
 
